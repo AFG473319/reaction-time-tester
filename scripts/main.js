@@ -17,7 +17,7 @@ function startProcess(speedtestButton) {
 function endProcess(speedtestButton) {
   const end = Date.now();
   const start = speedtestButton.dataset.startTime
-  delay = end - start;
+  const delay = end - start;
   alert(`${delay}ms`);
   delete speedtestButton.dataset.startTime
   speedtestButton.classList.remove("ready-button");
