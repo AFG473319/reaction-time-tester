@@ -1,0 +1,30 @@
+.speedtest-button {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border: 1px outset blue;
+  background-color: lightblue;
+  height: 200px;
+  width: 200px;
+  cursor: pointer;
+  border-radius: 50%;
+}
+
+.waiting-button {
+  background-color: red;
+  color: white;
+  cursor: not-allowed;
+}
+
+.ready-button {
+  background-color: green;
+  cursor: pointer;
+}
+
+.wrapper {
+  position: relative;
+  text-align: center;
+  top: 50%;
+  height: 100vh;
+}
