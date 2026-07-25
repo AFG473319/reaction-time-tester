@@ -8,7 +8,6 @@ function startProcess(speedtestButton) {
     speedtestButton.classList.remove("waiting-button");
     speedtestButton.classList.add("ready-button");
     speedtestButton.innerHTML = "PRESS ME NOW!";
-    speedtestButton.disabled = false;
     speedtestButton.dataset.startTime = Date.now();
   }, timeoutValue);
   speedtestButton.dataset.timeoutId = String(timeoutId);
@@ -31,11 +30,11 @@ function endProcess(speedtestButton) {
   
   alert(`${delay}ms`);
   delete speedtestButton.dataset.startTime;
+  delete speedtestButton.dataset.timeoutId; // Clear the timeout ID to prevent the old timeout from firing
   speedtestButton.classList.remove("ready-button");
   speedtestButton.innerHTML = "CLICK TO START";
 }
 
-// Attach the initial click handler
 
 const speedtestButton = document.querySelector('.js-speedtest-button');
 const penaltyParagraph = document.querySelector(".js-penalty-paragraph");
@@ -55,27 +54,23 @@ document.querySelector('.js-speedtest-button').addEventListener('click', () => {
     // If the user is finishing the started test
     endProcess(speedtestButton);
   } else if (speedtestButton.classList.contains("waiting-button")) {
-    // If the user is clicking the button before the waiting process is done
-    if (!penaltyTimeoutId) {
+    
+      // 1. If a penalty timer is ALREADY running, kill it so we can restart it.
+      if (penaltyTimeoutId) {
+          clearTimeout(penaltyTimeoutId);
+      }
+
+      // 2. Do the exact same reset logic for both cases
       clearTimeout(Number(speedtestButton.dataset.timeoutId));
       delete speedtestButton.dataset.timeoutId;
       speedtestButton.classList.remove("waiting-button");
       speedtestButton.innerHTML = "CLICK TO START";
       penaltyParagraph.style.display = "block";
+      
+      // 3. Start the 5-second timer
       penaltyTimeoutId = setTimeout(() => {
-        penaltyParagraph.style.display = "none";
-        penaltyTimeoutId = null;
+          penaltyParagraph.style.display = "none";
+          penaltyTimeoutId = null;
       }, 5000);
-    } else {
-      clearTimeout(penaltyTimeoutId);
-      delete speedtestButton.dataset.timeoutId;
-      speedtestButton.classList.remove("waiting-button");
-      speedtestButton.innerHTML = "CLICK TO START";
-      penaltyParagraph.style.display = "block";
-      penaltyTimeoutId = setTimeout(() => {
-        penaltyParagraph.style.display = "none";
-        penaltyTimeoutId = null;
-      }, 5000);
-    }
   }
 });
