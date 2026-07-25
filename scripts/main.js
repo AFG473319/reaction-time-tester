@@ -16,10 +16,21 @@ function startProcess(speedtestButton) {
 
 function endProcess(speedtestButton) {
   const end = Date.now();
-  const start = speedtestButton.dataset.startTime
+  const start = speedtestButton.dataset.startTime;
   const delay = end - start;
+  
+  const bestRecord = localStorage.getItem("best-record");
+  const bestRecordValue = bestRecord ? JSON.parse(bestRecord) : Infinity;
+  
+  if (delay < bestRecordValue) {
+    localStorage.setItem("best-record", JSON.stringify(delay));
+    bestRecordParagraph.innerHTML = `Best record yet: ${delay}ms`;
+  } else {
+    bestRecordParagraph.innerHTML = `Best record yet: ${bestRecordValue === Infinity ? "None yet" : bestRecordValue}ms`;
+  }
+  
   alert(`${delay}ms`);
-  delete speedtestButton.dataset.startTime
+  delete speedtestButton.dataset.startTime;
   speedtestButton.classList.remove("ready-button");
   speedtestButton.innerHTML = "CLICK TO START";
 }
@@ -28,7 +39,14 @@ function endProcess(speedtestButton) {
 
 const speedtestButton = document.querySelector('.js-speedtest-button');
 const penaltyParagraph = document.querySelector(".js-penalty-paragraph");
+const bestRecordParagraph = document.querySelector(".js-best-all-time");
 let penaltyTimeoutId = null;
+const bestRecord = localStorage.getItem("best-record");
+if (bestRecord !== null) {
+  bestRecordParagraph.innerHTML = `Best record yet: ${JSON.parse(bestRecord)}ms`;
+} else {
+  bestRecordParagraph.innerHTML = "Best record yet: None yet";
+}
 document.querySelector('.js-speedtest-button').addEventListener('click', () => {
   // If the user wants to start a new test
   if (!(speedtestButton.classList.contains("ready-button")) && !(speedtestButton.classList.contains("waiting-button"))) {
@@ -50,6 +68,10 @@ document.querySelector('.js-speedtest-button').addEventListener('click', () => {
       }, 5000);
     } else {
       clearTimeout(penaltyTimeoutId);
+      delete speedtestButton.dataset.timeoutId;
+      speedtestButton.classList.remove("waiting-button");
+      speedtestButton.innerHTML = "CLICK TO START";
+      penaltyParagraph.style.display = "block";
       penaltyTimeoutId = setTimeout(() => {
         penaltyParagraph.style.display = "none";
         penaltyTimeoutId = null;

@@ -1,14 +1,35 @@
+p {
+  color: #a00;
+  background: rgba(255, 230, 230, 0.95);
+  border: 1px solid #f5a0a0;
+  border-radius: 12px;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
+  padding: 16px 20px;
+  max-width: 400px;
+  text-align: center;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+body {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
 .speedtest-button {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
   border: 1px outset blue;
   background-color: lightblue;
   height: 200px;
   width: 200px;
   cursor: pointer;
   border-radius: 50%;
+  flex-shrink: 0;
 }
 
 .waiting-button {
@@ -22,23 +43,28 @@
 }
 
 .wrapper {
-  position: relative;
-  text-align: center;
-  top: 50%;
-  height: 50vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  width: 100%;
+  max-width: 400px;
 }
 
 .penalty-paragraph {
-  color: #a00;
   display: none;
-  background: rgba(255, 230, 230, 0.95);
-  border: 1px solid #f5a0a0;
+}
+
+.best-all-time {
+  color: #1a5c1a;
+  background: rgba(180, 230, 180, 0.95);
+  border: 1px solid #8fd08f;
   border-radius: 12px;
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
   padding: 16px 20px;
-  margin: 16px auto 0;
   max-width: 400px;
   text-align: center;
   font-weight: 700;
   letter-spacing: 0.02em;
+  flex-shrink: 0;
 }
