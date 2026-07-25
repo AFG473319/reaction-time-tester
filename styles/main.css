@@ -14,7 +14,6 @@
 .waiting-button {
   background-color: red;
   color: white;
-  cursor: not-allowed;
 }
 
 .ready-button {
@@ -26,5 +25,20 @@
   position: relative;
   text-align: center;
   top: 50%;
-  height: 100vh;
+  height: 50vh;
+}
+
+.penalty-paragraph {
+  color: #a00;
+  display: none;
+  background: rgba(255, 230, 230, 0.95);
+  border: 1px solid #f5a0a0;
+  border-radius: 12px;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
+  padding: 16px 20px;
+  margin: 16px auto 0;
+  max-width: 400px;
+  text-align: center;
+  font-weight: 700;
+  letter-spacing: 0.02em;
 }

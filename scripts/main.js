@@ -3,15 +3,15 @@ function startProcess(speedtestButton) {
   
   speedtestButton.classList.add("waiting-button");
   speedtestButton.innerHTML = "WAIT...";
-  speedtestButton.disabled = true;
 
-  setTimeout(() => {
+  const timeoutId = setTimeout(() => {
     speedtestButton.classList.remove("waiting-button");
     speedtestButton.classList.add("ready-button");
     speedtestButton.innerHTML = "PRESS ME NOW!";
     speedtestButton.disabled = false;
     speedtestButton.dataset.startTime = Date.now();
   }, timeoutValue);
+  speedtestButton.dataset.timeoutId = String(timeoutId);
 }
 
 function endProcess(speedtestButton) {
@@ -27,13 +27,33 @@ function endProcess(speedtestButton) {
 // Attach the initial click handler
 
 const speedtestButton = document.querySelector('.js-speedtest-button');
+const penaltyParagraph = document.querySelector(".js-penalty-paragraph");
+let penaltyTimeoutId = null;
 document.querySelector('.js-speedtest-button').addEventListener('click', () => {
   // If the user wants to start a new test
-  if (!speedtestButton.disabled && !(speedtestButton.classList.contains("ready-button"))) {
-    startProcess(speedtestButton)
-  }
-  // If the user is finishing the started test
-  if (!speedtestButton.disabled && speedtestButton.classList.contains("ready-button")) {
-    endProcess(speedtestButton)
+  if (!(speedtestButton.classList.contains("ready-button")) && !(speedtestButton.classList.contains("waiting-button"))) {
+    startProcess(speedtestButton);
+  } else if (speedtestButton.classList.contains("ready-button")) {
+    // If the user is finishing the started test
+    endProcess(speedtestButton);
+  } else if (speedtestButton.classList.contains("waiting-button")) {
+    // If the user is clicking the button before the waiting process is done
+    if (!penaltyTimeoutId) {
+      clearTimeout(Number(speedtestButton.dataset.timeoutId));
+      delete speedtestButton.dataset.timeoutId;
+      speedtestButton.classList.remove("waiting-button");
+      speedtestButton.innerHTML = "CLICK TO START";
+      penaltyParagraph.style.display = "block";
+      penaltyTimeoutId = setTimeout(() => {
+        penaltyParagraph.style.display = "none";
+        penaltyTimeoutId = null;
+      }, 5000);
+    } else {
+      clearTimeout(penaltyTimeoutId);
+      penaltyTimeoutId = setTimeout(() => {
+        penaltyParagraph.style.display = "none";
+        penaltyTimeoutId = null;
+      }, 5000);
+    }
   }
 });
