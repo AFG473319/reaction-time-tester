@@ -19,6 +19,8 @@ function endProcess(speedtestButton) {
   const delay = end - start;
   
   const bestRecord = localStorage.getItem("best-record");
+  const lastRecords = localStorage.getItem("last-records");
+  let lastRecordsValue = lastRecords ? JSON.parse(lastRecords) : [];
   const bestRecordValue = bestRecord ? JSON.parse(bestRecord) : Infinity;
   
   if (delay < bestRecordValue) {
@@ -33,12 +35,33 @@ function endProcess(speedtestButton) {
   delete speedtestButton.dataset.timeoutId; // Clear the timeout ID to prevent the old timeout from firing
   speedtestButton.classList.remove("ready-button");
   speedtestButton.innerHTML = "CLICK TO START";
+  const recordsCount = lastRecordsValue.length
+  if (recordsCount === 5) {
+    lastRecordsValue.shift();
+  }
+  lastRecordsValue.push(delay);
+  localStorage.setItem("last-records", JSON.stringify(lastRecordsValue));
+  updateAverageDisplay();
 }
 
+
+function updateAverageDisplay() {
+  const lastRecords = localStorage.getItem("last-records");
+  const records = lastRecords ? JSON.parse(lastRecords) : [];
+
+  if (records.length > 0) {
+    const sum = records.reduce((acc, val) => acc + val, 0);
+    const average = Math.round(sum / records.length);
+    averageRecordParagraph.innerHTML = `Average: ${average}ms`;
+  } else {
+    averageRecordParagraph.innerHTML = `Average: None yet`;
+  }
+}
 
 const speedtestButton = document.querySelector('.js-speedtest-button');
 const penaltyParagraph = document.querySelector(".js-penalty-paragraph");
 const bestRecordParagraph = document.querySelector(".js-best-all-time");
+const averageRecordParagraph = document.querySelector(".js-average-record")
 let penaltyTimeoutId = null;
 const bestRecord = localStorage.getItem("best-record");
 if (bestRecord !== null) {
@@ -46,6 +69,9 @@ if (bestRecord !== null) {
 } else {
   bestRecordParagraph.innerHTML = "Best record yet: None yet";
 }
+
+updateAverageDisplay();
+
 document.querySelector('.js-speedtest-button').addEventListener('click', () => {
   // If the user wants to start a new test
   if (!(speedtestButton.classList.contains("ready-button")) && !(speedtestButton.classList.contains("waiting-button"))) {

@@ -68,3 +68,17 @@ body {
   letter-spacing: 0.02em;
   flex-shrink: 0;
 }
+
+.average-record {
+  color: #1a3c7a;
+  background: rgba(180, 210, 230, 0.95);
+  border: 1px solid #8fb0d0;
+  border-radius: 12px;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
+  padding: 16px 20px;
+  max-width: 400px;
+  text-align: center;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  flex-shrink: 0;
+}
